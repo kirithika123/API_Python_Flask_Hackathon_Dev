@@ -1,0 +1,814 @@
+openapi: 3.0.1
+info:
+  title: API documentation
+  description: Manages Users,Skills,UserSkillsMapping Resources
+  version: '1.0'
+
+paths:
+  /Users:
+    get:
+      tags:
+      - "Users"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/totalusers'
+
+        '401':
+          description: Unauthorised access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_401'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_404'
+
+
+    post:
+      tags:
+      - "Users"
+      responses:
+        '201':
+          description: created a new user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '400':
+          description: Failed to create due to invalid data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_400'
+      requestBody:
+        $ref: '#/components/requestBodies/userBody'
+  /Users/{id}:
+    get:
+
+      tags:
+      - "Users/id"
+      parameters:
+        - in: path
+          schema:
+            $ref: '#/components/schemas/id'
+          name: id
+          description: Id of the user
+          required: true
+
+      responses:
+        '200':
+          description: Got back the specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/users'
+
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_404'
+        '401':
+          description: Unauthorised access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_401'
+    put:
+      tags:
+      - "Users/id"
+      parameters:
+        - in: path
+          schema:
+            $ref: '#/components/schemas/id'
+          name: id
+          description: Id of the user
+          required: true
+      responses:
+        '200':
+          description: updated the existing user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '400':
+          description: Failed to update due to invalid data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_400'
+
+      requestBody:
+        $ref: '#/components/requestBodies/userBodyput'
+    delete:
+      tags:
+      - "Users/id"
+      parameters:
+        - in: path
+          schema:
+            $ref: '#/components/schemas/id'
+          name: id
+          description: Id of the user
+          required: true
+      responses:
+        '200':
+          description: Successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                      type: string
+                  message_response:
+                      type: string
+        '404':
+          description: specified user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_400'
+        '405':
+          description: specified operation is not allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_405'
+
+
+  /Skills:
+    get:
+      tags:
+      - "Skills"
+      responses:
+        '200':
+          description: got back the list of skills
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/totalskills'
+
+        '401':
+          description: Unauthorised access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_401'
+        '404':
+            description: Skill not found
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error_404'
+
+    post:
+      tags:
+      - "Skills"
+      responses:
+        '201':
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/skill'
+        '400':
+          description: Failed to create due to invalid data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_400'
+      requestBody:
+          $ref: '#/components/requestBodies/skillBody'
+  /Skills/{id}:
+    get:
+      tags:
+      - "Skills/id"
+      parameters:
+        - in: path
+          schema:
+            $ref: '#/components/schemas/sid'
+          name: id
+          description: Id of the skill
+          required: true
+
+      responses:
+        '200':
+          description: Got back the specified skill
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/skills'
+
+        '401':
+          description: Unauthorised access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_401'
+        '404':
+          description: Skill not found
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error_404'
+    put:
+      tags:
+      - "Skills/id"
+      parameters:
+        - in: path
+          schema:
+            $ref: '#/components/schemas/sid'
+          name: id
+          description: Id of the skill
+          required: true
+      responses:
+        '200':
+          description: updated the existing skill
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/skill'
+        '400':
+            description: Failed to create due to invalid data
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error_400'
+        '404':
+            description: Skill not found
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error_400'
+      requestBody:
+        $ref: '#/components/requestBodies/skillBodyput'
+    delete:
+      tags:
+      - "Skills/id"
+      parameters:
+        - in: path
+          schema:
+            $ref: '#/components/schemas/sid'
+          name: id
+          description: Id of the skill
+          required: true
+      responses:
+        '200':
+          description: Successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message_response:
+                      type: string
+        '404':
+            description: Failed to delete due to invalid data
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error_400'
+
+
+  /UserSkills:
+    get:
+      tags:
+      - "UserSkills"
+      responses:
+        '200':
+          description: got back the list of userskills
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/totalus'
+
+        '401':
+            description: Unauthorised access
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error_401'
+        '404':
+              description: User Skill Mapping Not Found
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Error_404'
+
+    post:
+      tags:
+      - "UserSkills"
+      responses:
+        '201':
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userskill'
+        '400':
+          description: Failed to create due to invalid data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_400'
+      requestBody:
+        $ref: '#/components/requestBodies/userskillBody'
+
+  /UserSkills/{id}:
+    get:
+      tags:
+      - "UserSkills/id"
+      parameters:
+        - in: path
+          schema:
+            $ref: '#/components/schemas/usid'
+          name: id
+          description: Id of the userskill
+          required: true
+
+      responses:
+        '200':
+          description: got back the list of skills
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userskills'
+
+        '401':
+            description: Unauthorised access
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error_401'
+        '404':
+            description: User Skill mapping not found
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error_404'
+    put:
+      tags:
+      - "UserSkills/id"
+      parameters:
+        - in: path
+          schema:
+            $ref: '#/components/schemas/usid'
+          name: id
+          description: Id of the userskill
+          required: true
+      responses:
+        '201':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userskill'
+        '400':
+          description: Failed to update due to invalid data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_400'
+      requestBody:
+        $ref: '#/components/requestBodies/userskillBodyput'
+    delete:
+      tags:
+      - "UserSkills/id"
+      parameters:
+        - in: path
+          schema:
+            $ref: '#/components/schemas/usid'
+          name: id
+          description: Id of the userskill
+          required: true
+      responses:
+        '200':
+          description: Successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message_response:
+                        type: string
+        '404':
+            description: Failed to delete due to invalid data
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error_404'
+        '405':
+            description: specified operation is not allowed
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error_405'
+  /UserSkillsMap:
+    get:
+      tags:
+      - "UserSkillsMap"
+      responses:
+          '200':
+             description: got back the list of users with skills mapped
+             content:
+                application/json:
+                 schema:
+                     $ref: '#/components/schemas/userskillmaparray'
+
+          '404':
+             description: User skill mapping not found
+             content:
+                application/json:
+                   schema:
+                      $ref: '#/components/schemas/Error_404'
+          '401':
+             description: Unauthorised access
+             content:
+                application/json:
+                  schema:
+                     $ref: '#/components/schemas/Error_401'
+  /UserSkillsMap?user_id=value:
+    get:
+      tags:
+      - "UserSkillsMap/userid"
+      parameters:
+        - in: query
+          schema:
+            $ref: '#/components/schemas/id'
+          name: user_id
+          description: Id of the user
+          required: true
+      responses:
+        '200':
+          description: got back the list of users with skills mapped
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/userskillmap'
+
+        '404':
+          description: User skill mapping not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_404'
+        '401':
+          description: Unauthorised access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_401'
+  /UserSkillsMap?skill_id=value:
+    get:
+      tags:
+      - "UserSkillsMap/skillid"
+      parameters:
+        - in: query
+          schema:
+            $ref: '#/components/schemas/sid'
+          name: skill_id
+          description: Id of the skill
+          required: true
+      responses:
+        '200':
+          description: got back the list of skills mapped with users
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/userskillmaparray'
+        '404':
+          description: User skill mapping not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_404'
+        '401':
+          description: Unauthorised access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_401'
+
+components:
+
+  requestBodies:
+    userBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/userb'
+    userBodyput:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/userbput'
+    skillBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/skillb'
+    skillBodyput:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/skills'
+    userskillBody:
+     required: true
+     content:
+       application/json:
+        schema:
+          $ref: '#/components/schemas/userskillb'
+    userskillBodyput:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/userskillsbput'
+  schemas:
+    id:
+     type: string
+     example: "U01"
+    sid:
+     type: integer
+     example: 1
+    usid:
+     type: string
+     example: "US01"
+    user:
+      type: object
+      properties:
+        user id:
+          type: string
+        name:
+          type: string
+        phone_number:
+          type: number
+          example: 123456789
+        location:
+          type: string
+        time_zone:
+          type: string
+        linkedin_url:
+          type: string
+        education_ug:
+          type: string
+        education_pg:
+          type: string
+        visa_status:
+          type: string
+        comments:
+          type: string
+        message_response:
+          type: string
+    skill:
+      type: object
+      required:
+      - Skill_name
+      properties:
+        Skill_Id:
+          type: integer
+          example: 1
+          minimum: 1
+        Skill_name:
+          type: string
+        message_response:
+          type: string
+
+    userskill:
+      type: object
+      required:
+      - sid
+      - id
+      properties:
+        user_skill_id:
+          type: string
+        user_id:
+          type: string
+        Skill_id:
+          type: integer
+          example: 1
+          minimum: 1
+        months_of_exp:
+          type: number
+          example: 12
+        message_response:
+          type: string
+    users:
+      type: object
+      properties:
+          user id:
+            type: string
+          name:
+            type: string
+          phone number:
+            type: number
+            example: 123456789
+          location:
+            type: string
+          time_zone:
+            type: string
+          linkedin url:
+            type: string
+    totalusers:
+      type: array
+      items:
+        $ref: '#/components/schemas/users'
+    userb:
+      type: object
+      properties:
+          name:
+            type: string
+          phone_number:
+            type: number
+            example: 123456789
+          location:
+            type: string
+          time_zone:
+            type: string
+          linkedin_url:
+            type: string
+          education_ug:
+            type: string
+          education_pg:
+            type: string
+          visa_status:
+            type: string
+          comments:
+            type: string
+    userbput:
+      type: object
+      properties:
+          user id:
+            type: string
+          name:
+            type: string
+          phone_number:
+            type: number
+            example: 123456789
+          location:
+            type: string
+          time_zone:
+            type: string
+          linkedin_url:
+            type: string
+          education_ug:
+            type: string
+          education_pg:
+            type: string
+          visa_status:
+            type: string
+          comments:
+            type: string
+    skills:
+      type: object
+      properties:
+        Skill_Id:
+          type: integer
+          minimum: 1
+          example: 1
+        Skill_name:
+          type: string
+    totalskills:
+      type: array
+      items:
+        $ref: '#/components/schemas/skills'
+    skillb:
+      type: object
+      required:
+        - Skill_name
+      properties:
+        Skill_name:
+          type: string
+
+    userskills:
+      type: object
+      properties:
+          user_skill_id:
+            type: string
+          user_id:
+            type: string
+          Skill_id:
+            type: integer
+            example: 1
+            minimum: 1
+          months_of_exp:
+            type: number
+            example: 12
+    totalus:
+      type: array
+      items:
+        $ref: '#/components/schemas/userskills'
+    userskillb:
+        type: object
+        required:
+          - sid
+          - id
+        properties:
+          user_id:
+            type: string
+          Skill_id:
+            type: integer
+            example: 1
+            minimum: 1
+          months_of_exp:
+            type: number
+            example: 1
+            minimum: 1
+    userskillsbput:
+      type: object
+      properties:
+        user_skill_id:
+          type: string
+        user_id:
+          type: string
+        Skill_id:
+          type: integer
+          example: 1
+          minimum: 1
+        months_of_exp:
+          type: number
+          example: 1
+          minimum: 1
+    skillmap:
+      type: object
+      properties:
+        id:
+            type: integer
+            example: 1
+            minimum: 1
+        skill:
+            type: string
+    usermap:
+      type: object
+      properties:
+        id:
+            type: string
+            example: U01
+        firstName:
+            type: string
+            example: Sachin
+        lastName:
+            type: string
+            example: Tendulkar
+    skillmaparray:
+      type: array
+      items:
+        $ref: '#/components/schemas/skillmap'
+    usermaparray:
+      type: array
+      items:
+        $ref: '#/components/schemas/usermap'
+    userskillmap:
+      type: object
+      properties:
+        id:
+            type: string
+        firstName:
+            type: string
+        lastName:
+            type: string
+        items:
+          $ref: '#/components/schemas/skillmaparray'
+    userskillmaparray:
+      type: array
+      items:
+        $ref: '#/components/schemas/userskillmap'
+    skillusermap:
+      type: object
+      properties:
+        Skill_Id:
+            type: integer
+            minimum: 1
+            example: 1
+        Skill_name:
+            type: string
+            example: Java
+        items:
+          $ref: '#/components/schemas/usermaparray'
+
+    Error_400:
+      type: string
+      default: Bad data sent
+    Error_404:
+      type: string
+      default: User not found
+    Error_401:
+      type: string
+      default: Unauthorised access
+    Error_405:
+      type: string
+      default: Operation not allowed
+
+

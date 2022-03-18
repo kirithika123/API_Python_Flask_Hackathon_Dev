@@ -1,0 +1,10 @@
+# Python libraries needed for this Flask app to run
+# Use 'pip install -r requirements.txt' to install
+
+flask
+flask_sqlalchemy
+flask_restful
+flask_httpauth
+psycopg2-binary
+pytest
+python-decouple

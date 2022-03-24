@@ -8,3 +8,4 @@ flask_httpauth
 psycopg2-binary
 pytest
 python-decouple
+gunicorn==20.1.0

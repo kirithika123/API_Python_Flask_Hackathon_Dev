@@ -22,7 +22,7 @@ from configuration import DATABASE_URL_DEV
 
 # Configuring Flask app
 app = Flask(__name__)
-SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL_DEV')
+SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL')
 #app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL_DEV
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)

@@ -9,7 +9,7 @@ Currently, this Flask app runs with the default WerkZeug development server. For
 it with a production grade HTTP server
 
 """
-
+import os
 from flask import Flask, render_template
 from flask_restful import Api
 from resources.users_resource import UsersResource
@@ -22,7 +22,8 @@ from configuration import DATABASE_URL_DEV
 
 # Configuring Flask app
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL_DEV
+SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL_DEV')
+#app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL_DEV
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 api = Api(app)

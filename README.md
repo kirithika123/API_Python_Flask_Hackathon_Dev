@@ -2,6 +2,8 @@
 
 Code base for the implementation of Users, Skills, UserSkills and UserSkillsMapping APIs for LMS. 
 
+This flask app is also deployed on heroku at :  https://lmspython-flaskapi.herokuapp.com/
+
 Swagger launches on http://127.0.0.1:5000/
 
 Endpoints - 
